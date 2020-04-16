@@ -1,0 +1,35 @@
+
+    .container-control{
+
+        text-align: center;
+    }
+    
+.btn-group{
+    position: fixed;
+    bottom: 0;
+    margin-bottom:10px;
+    display: inline-block;
+    width: 650;
+   z-index:1000; 
+   margin-top:-20px; 
+  pointer-events: none; 
+}
+
+
+    
+    @media only screen and (min-width: 2100px) {
+
+    .btn-group {
+      z-index: 4;
+    margin-top: 335%;
+    width: 100%;
+    justify-content: center;
+    
+    }
+    
+    
+    
+    }
+    
+
+
