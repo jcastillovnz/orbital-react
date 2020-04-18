@@ -21,7 +21,8 @@
     },
     "plugins": [
         "react",
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "styled-jsx/babel"
     ],
     "rules": {
     }

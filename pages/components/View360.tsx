@@ -1,46 +1,64 @@
-import React, { Component } from "react";
-//import "./React360.css";
+import React, {useState, useEffect } from "react";
+
 
 // You can play with this to adjust the sensitivity
 // higher values make mouse less sensitive
-const pixelsPerDegree = 3;
+const pixelsPerDegree = 2;
 
-const App =(props)=> {
-const  defaultProps = { dir: "awair-360", numImages: 55 };
+interface props {
+  dir: string
+  numImages?: number
+}
 
-  const state = {
+
+const App =(props: props)=> {
+const {dir, numImages} = props;
+
+const [imageIndex, changeImageIndex] = useState(0);
+const [dragging, changeDragging] = useState(false);
+const [dragStartIndex, changeDragStartIndex] = useState(0);
+const [dragStart, changeDragStart] = useState(0);
+
+/*   const state = {
     dragging: false,
     imageIndex: 0,
     dragStartIndex: 0
-  };
+  }; */
 
-  componentDidMount = () => {
-    document.addEventListener("mousemove", handleMouseMove, false);
-    document.addEventListener("mouseup", handleMouseUp, false);
-  };
-
-  componentWillUnmount = () => {
-    document.removeEventListener("mousemove", handleMouseMove, false);
-    document.removeEventListener("mouseup", handleMouseUp, false);
+  const handleMouseMove = (e) => {
+    console.log("state on draggin ", dragging)
+    console.log("handle mouse move ->>>>, draggin: ", dragging)
+    if (dragging===false) {
+    //  alert("IS TRUE DRAGGIN IN MOVE")
+      updateImageIndex(e.screenX);
+     /// alert("is dragging")
+      console.log("image index", imageIndex)
+    }
   };
 
   const handleMouseDown = (e) => {
     e.persist();
-    this.setState(state => ({
+   // ChangeStatusDraggin()
+    changeDragging(true) //true
+    changeDragStart(e.screenX)
+    changeDragStartIndex(imageIndex)
+    console.log("draggin set in true --->", dragging)
+    //alert( dragging)
+/*     this.setState(state => ({
       dragging: true,
       dragStart: e.screenX,
       dragStartIndex: state.imageIndex
-    }));
+    })); */
   };
 
   const handleMouseUp = () => {
-    this.setState({ dragging: false });
+    changeDragging(false)  // false
+    console.log("draggin set in false --->", dragging)
   };
 
   const updateImageIndex = (currentPosition) => {
-    let numImages = this.props.numImages;
+    console.log("updateImageIndex", currentPosition )
     const pixelsPerImage = pixelsPerDegree * (360 / numImages);
-    const { dragStart, imageIndex, dragStartIndex } = this.state;
     // pixels moved
     let dx = (currentPosition - dragStart) / pixelsPerImage;
     let index = Math.floor(dx) % numImages;
@@ -51,13 +69,8 @@ const  defaultProps = { dir: "awair-360", numImages: 55 };
     index = (index + dragStartIndex) % numImages;
     // console.log(index, dragStartIndex, numImages)
     if (index !== imageIndex) {
-      this.setState({ imageIndex: index });
-    }
-  };
-
-  const handleMouseMove = (e) => {
-    if (this.state.dragging) {
-      updateImageIndex(e.screenX);
+      //this.setState({ imageIndex: index });
+      changeImageIndex(index)
     }
   };
 
@@ -65,16 +78,60 @@ const  defaultProps = { dir: "awair-360", numImages: 55 };
     e.preventDefault();
   };
 
-  const renderImage = () => {
-    const { imageIndex } = this.state;
 
+
+
+  useEffect(() => {
+console.log("se monta")
+    document.addEventListener("mousemove", handleMouseMove, false);
+    document.addEventListener("mouseup", handleMouseUp, false);
+      // returned function will be called on component unmount 
+  return () => {
+   console.log("se desmonta")
+    document.removeEventListener('mousemove',handleMouseMove, false);
+    document.removeEventListener("mouseup", handleMouseUp, false);
+  }
+  }, []); 
+
+
+  
+
+  const renderImage = () => {
+    
     return (
-      <div className="react360">
-        <img
+      <div style={{position:'absolute',   
+      width:'auto',
+      display:'block',
+      margin: '0 auto',
+      'text-align': 'left', } as React.CSSProperties} className="react360">
+      <img  style={{ 
+       margin:'auto',
+       position:'relative',
+       height: '95vh',
+       width:'auto',
+       display:'flex',
+       'justify-content': 'center',
+       'align-items': 'center',
+       'background-color': 'white',
+       '-webkit-user-select': 'none',
+       '-khtml-user-select': 'none',
+       '-moz-user-select': 'none',
+       '-ms-user-select': 'none',
+       '-o-user-select':'none',
+       'user-select': 'none',
+       left:'82%',
+       bottom:'150%',
+       top:'-25%',
+       'transform': 'translate(-50%, 0)',
+      '-ms-transform': 'translate(-50%, 0)',
+       '-webkit-transform': 'translate(-50%, 0)',
+       'z-index': 0
+         } as React.CSSProperties}
           className="react-360-img"
-          alt=""
-          src={require(`./${props.dir}/${imageIndex}.jpg`)}
+          src={`${dir}/${imageIndex}.jpg`}
+         /*  src={require(`${dir}/${imageIndex}.jpg`)} */
         />
+
       </div>
     );
   };
@@ -83,10 +140,31 @@ const  defaultProps = { dir: "awair-360", numImages: 55 };
     return (
       <div
         className="react-360-img"
-        onMouseDown={this.handleMouseDown}
-        onDragStart={this.preventDragHandler}
+        onMouseDown={handleMouseDown}
+        onDragStart={preventDragHandler}
+     
       >
-        {this.renderImage()}
+      <div style={{position:'fixed'}}>
+        Metrics:
+<ul>
+<li>
+Num images: {numImages}
+  </li>
+<li>
+ Image index: {imageIndex}
+  </li>
+  <li>
+  Dragging:{dragging? 'Is dragging': 'No draggin'}
+  </li>
+  <li>
+  DragStart:{dragStart}
+  </li>
+  <li>
+  DragStartIndex: {dragStartIndex}
+  </li>
+</ul>
+      </div>  
+        {renderImage()}
       </div>
     );
 
