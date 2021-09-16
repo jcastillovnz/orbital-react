@@ -1,4 +1,5 @@
-export default function preloadImages(srcs) {
+export default async function preloadImages(srcs) {
+  console.log("preload entrie", srcs)
     function loadImage(src) {
       return new Promise((resolve, reject) => {
         const img = new Image();
@@ -11,9 +12,8 @@ export default function preloadImages(srcs) {
         img.src = src;
       });
     }
-    const promises = [];
-    for (let i = 0; i < srcs.length; i++) {
-      promises.push(loadImage(srcs[i]));
-    }
-    return Promise.all(promises);
+    const promises = srcs.map((image, index)=>{
+      return loadImage(srcs[index])
+    }) 
+    return await Promise.all(promises);
   }

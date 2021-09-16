@@ -106,7 +106,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! next/head */ "next/head");
 /* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(next_head__WEBPACK_IMPORTED_MODULE_1__);
-var _jsxFileName = "C:\\Users\\Jose Castillo\\Desktop\\template\\orbital-react\\pages\\components\\Header.tsx";
+var _jsxFileName = "/home/jcastillo-vnz/orbital-react/pages/components/Header.tsx";
 
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
@@ -161,7 +161,7 @@ const Header = () => __jsx("div", {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-var _jsxFileName = "C:\\Users\\Jose Castillo\\Desktop\\template\\orbital-react\\pages\\components\\Layout.tsx";
+var _jsxFileName = "/home/jcastillo-vnz/orbital-react/pages/components/Layout.tsx";
 
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 const layoutStyle = {};
@@ -191,7 +191,7 @@ const Layout = props => __jsx("div", {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-var _jsxFileName = "C:\\Users\\Jose Castillo\\Desktop\\template\\orbital-react\\pages\\components\\Loader.tsx";
+var _jsxFileName = "/home/jcastillo-vnz/orbital-react/pages/components/Loader.tsx";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
@@ -238,10 +238,47 @@ const Logo = () => {
 
 /***/ }),
 
-/***/ "./pages/components/View360.tsx":
-/*!**************************************!*\
-  !*** ./pages/components/View360.tsx ***!
-  \**************************************/
+/***/ "./pages/components/View360/Preload.tsx":
+/*!**********************************************!*\
+  !*** ./pages/components/View360/Preload.tsx ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return preloadImages; });
+async function preloadImages(srcs) {
+  console.log("preload entrie", srcs);
+
+  function loadImage(src) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+
+      img.onload = function () {
+        resolve(img);
+      };
+
+      img.onerror = img.onabort = function () {
+        reject(src);
+      };
+
+      img.src = src;
+    });
+  }
+
+  const promises = srcs.map((image, index) => {
+    return loadImage(srcs[index]);
+  });
+  return await Promise.all(promises);
+}
+
+/***/ }),
+
+/***/ "./pages/components/View360/index.tsx":
+/*!********************************************!*\
+  !*** ./pages/components/View360/index.tsx ***!
+  \********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -249,8 +286,10 @@ const Logo = () => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-var _jsxFileName = "C:\\Users\\Jose Castillo\\Desktop\\template\\orbital-react\\pages\\components\\View360.tsx";
+/* harmony import */ var _Preload__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Preload */ "./pages/components/View360/Preload.tsx");
+var _jsxFileName = "/home/jcastillo-vnz/orbital-react/pages/components/View360/index.tsx";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
  // You can play with this to adjust the sensitivity
 // higher values make mouse less sensitive
 
@@ -262,65 +301,49 @@ const App = props => {
     numImages
   } = props;
   const {
+    0: images,
+    1: setImages
+  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(Array);
+  const {
     0: imageIndex,
-    1: changeImageIndex
+    1: setImageIndex
   } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(0);
   const {
+    0: imagesPreloaded,
+    1: setImagesPreloaded
+  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false);
+  const {
     0: dragging,
-    1: changeDragging
+    1: setDragging
   } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false);
   const {
     0: dragStartIndex,
-    1: changeDragStartIndex
+    1: setDragStartIndex
   } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(0);
   const {
     0: dragStart,
-    1: changeDragStart
+    1: setDragStart
   } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(0);
-  /*   const state = {
-      dragging: false,
-      imageIndex: 0,
-      dragStartIndex: 0
-    }; */
 
   const handleMouseMove = e => {
-    console.log("state on draggin ", dragging);
-    console.log("handle mouse move ->>>>, draggin: ", dragging);
-
     if (dragging === false) {
-      //  alert("IS TRUE DRAGGIN IN MOVE")
-      updateImageIndex(e.screenX); /// alert("is dragging")
-
-      console.log("image index", imageIndex);
+      updateImageIndex(e.screenX);
     }
   };
 
   const handleMouseDown = e => {
-    e.persist(); // ChangeStatusDraggin()
-
-    changeDragging(true); //true
-
-    changeDragStart(e.screenX);
-    changeDragStartIndex(imageIndex);
-    console.log("draggin set in true --->", dragging); //alert( dragging)
-
-    /*     this.setState(state => ({
-          dragging: true,
-          dragStart: e.screenX,
-          dragStartIndex: state.imageIndex
-        })); */
+    e.persist();
+    setDragging(true);
+    setDragStart(e.screenX);
+    setDragStartIndex(imageIndex);
   };
 
   const handleMouseUp = () => {
-    changeDragging(false); // false
-
-    console.log("draggin set in false --->", dragging);
+    setDragging(false); // false
   };
 
   const updateImageIndex = currentPosition => {
-    console.log("updateImageIndex", currentPosition);
-    const pixelsPerImage = pixelsPerDegree * (360 / numImages); // pixels moved
-
+    const pixelsPerImage = pixelsPerDegree * (360 / numImages);
     let dx = (currentPosition - dragStart) / pixelsPerImage;
     let index = Math.floor(dx) % numImages;
 
@@ -328,11 +351,10 @@ const App = props => {
       index = numImages + index - 1;
     }
 
-    index = (index + dragStartIndex) % numImages; // console.log(index, dragStartIndex, numImages)
+    index = (index + dragStartIndex) % numImages;
 
     if (index !== imageIndex) {
-      //this.setState({ imageIndex: index });
-      changeImageIndex(index);
+      setImageIndex(index);
     }
   };
 
@@ -340,8 +362,21 @@ const App = props => {
     e.preventDefault();
   };
 
+  const handlePreloadImages = async () => {
+    for (let i = 0; i <= numImages - 1; i++) {
+      const imageIndex = i;
+      const filePath = `${dir}/${imageIndex}.jpg`;
+      images.push(filePath);
+    }
+
+    const imagesLoaded = await Object(_Preload__WEBPACK_IMPORTED_MODULE_1__["default"])(images).then(() => {
+      setImagesPreloaded(true);
+    });
+    console.log("imagesLoaded : ", imagesLoaded);
+  };
+
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
-    console.log("se monta");
+    handlePreloadImages();
     document.addEventListener("mousemove", handleMouseMove, false);
     document.addEventListener("mouseup", handleMouseUp, false); // returned function will be called on component unmount 
 
@@ -365,7 +400,7 @@ const App = props => {
       __self: undefined,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 102,
+        lineNumber: 85,
         columnNumber: 7
       }
     }, __jsx("img", {
@@ -399,8 +434,8 @@ const App = props => {
       __self: undefined,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 107,
-        columnNumber: 7
+        lineNumber: 92,
+        columnNumber: 9
       }
     }));
   };
@@ -412,8 +447,8 @@ const App = props => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 141,
-      columnNumber: 7
+      lineNumber: 126,
+      columnNumber: 5
     }
   }, __jsx("div", {
     style: {
@@ -422,50 +457,57 @@ const App = props => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 147,
+      lineNumber: 132,
       columnNumber: 7
     }
   }, "Metrics:", __jsx("ul", {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 149,
-      columnNumber: 1
+      lineNumber: 134,
+      columnNumber: 9
     }
   }, __jsx("li", {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 150,
-      columnNumber: 1
+      lineNumber: 135,
+      columnNumber: 11
     }
   }, "Num images: ", numImages), __jsx("li", {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 153,
-      columnNumber: 1
+      lineNumber: 138,
+      columnNumber: 11
     }
   }, "Image index: ", imageIndex), __jsx("li", {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 156,
-      columnNumber: 3
+      lineNumber: 141,
+      columnNumber: 11
     }
   }, "Dragging:", dragging ? 'Is dragging' : 'No draggin'), __jsx("li", {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 159,
-      columnNumber: 3
+      lineNumber: 144,
+      columnNumber: 11
     }
   }, "DragStart:", dragStart), __jsx("li", {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 162,
-      columnNumber: 3
+      lineNumber: 147,
+      columnNumber: 11
+    }
+  }, "imagesPreloaded:", imagesPreloaded), __jsx("li", {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 150,
+      columnNumber: 11
     }
   }, "DragStartIndex: ", dragStartIndex))), renderImage());
 };
@@ -489,8 +531,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Layout__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/Layout */ "./pages/components/Layout.tsx");
 /* harmony import */ var _components_Loader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/Loader */ "./pages/components/Loader.tsx");
 /* harmony import */ var _components_Header__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/Header */ "./pages/components/Header.tsx");
-/* harmony import */ var _components_View360__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/View360 */ "./pages/components/View360.tsx");
-var _jsxFileName = "C:\\Users\\Jose Castillo\\Desktop\\template\\orbital-react\\pages\\index.tsx";
+/* harmony import */ var _components_View360__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/View360 */ "./pages/components/View360/index.tsx");
+var _jsxFileName = "/home/jcastillo-vnz/orbital-react/pages/index.tsx";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
@@ -502,30 +544,30 @@ function Index() {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 15,
+      lineNumber: 12,
       columnNumber: 5
     }
   }, __jsx(_components_Header__WEBPACK_IMPORTED_MODULE_3__["default"], {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 16,
+      lineNumber: 13,
       columnNumber: 7
     }
   }), __jsx(_components_Loader__WEBPACK_IMPORTED_MODULE_2__["default"], {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 17,
+      lineNumber: 14,
       columnNumber: 9
     }
   }), __jsx(_components_View360__WEBPACK_IMPORTED_MODULE_4__["default"], {
-    dir: "https://raw.githubusercontent.com/jcastillovnz/Carque-360/master/iframes/roof/img/roof/renders",
+    dir: "https://raw.githubusercontent.com/jcastillovnz/Carque-360/master/iframes/r1/img/r1/renders/",
     numImages: 31,
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 18,
+      lineNumber: 15,
       columnNumber: 9
     }
   }));
@@ -540,7 +582,7 @@ function Index() {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\Jose Castillo\Desktop\template\orbital-react\pages\index.tsx */"./pages/index.tsx");
+module.exports = __webpack_require__(/*! /home/jcastillo-vnz/orbital-react/pages/index.tsx */"./pages/index.tsx");
 
 
 /***/ }),

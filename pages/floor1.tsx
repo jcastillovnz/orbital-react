@@ -12,7 +12,6 @@ export default function r1() {
     left: '50%',
     top: '50%',
     transform: 'translate(-50%, -50%)',
-  
     }}>
         <img
           className="icon-react360"
@@ -20,7 +19,7 @@ export default function r1() {
           src={'https://raw.githubusercontent.com/aldrinc/react-360-image/master/src/360_degrees.png'}
         />
         </div>
-        <React360 dir="https://raw.githubusercontent.com/jcastillovnz/Carque-360/master/iframes/r3/img/r3/renders" numImages={31} />
+        <React360 dir="https://raw.githubusercontent.com/jcastillovnz/Carque-360/master/iframes/r1/img/r1/renders/" numImages={31} />
 
 
     </Layout>

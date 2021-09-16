@@ -942,7 +942,7 @@ function connect(options) {
       error.name = err.name;
       error.stack = err.stack; // __NEXT_DIST_DIR is provided by webpack
 
-      (0, _sourceMapSupport.rewriteStacktrace)(error, "C:\\Users\\Jose Castillo\\Desktop\\template\\orbital-react\\.next");
+      (0, _sourceMapSupport.rewriteStacktrace)(error, "/home/jcastillo-vnz/orbital-react/.next");
       return error;
     }
   };
